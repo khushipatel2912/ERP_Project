@@ -1,29 +1,42 @@
 package com.erp.placement_erp.Controller;
 
-import com.erp.placement_erp.Entity.Student;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.erp.placement_erp.Dto.EligibleOrganisationDTO;
+import com.erp.placement_erp.Dto.PlacementStudentRequest;
+import com.erp.placement_erp.Filter.JWTFilter;
 import com.erp.placement_erp.Service.StudentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api")
-public class StudentController {
-    @Autowired
-private StudentService studentService;
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid Student loginRequest) {
-        if (loginRequest.getEmail() == null || loginRequest.getPassword() == null) {
-            return ResponseEntity.badRequest().body("Email and password must not be null");
-        }
+@RequestMapping("/api/v1/student")
+@RequiredArgsConstructor
 
-        Student student = studentService.login(loginRequest.getEmail(), loginRequest.getPassword());
-        if (student != null) {
-            return ResponseEntity.ok(student);
-        } else {
-            return ResponseEntity.status(401).body("Invalid credentials");
-        }
+public class StudentController {
+    private final StudentService studentService;
+    private static final Logger logger = LoggerFactory.getLogger(JWTFilter.class);
+
+    @GetMapping("/offers")
+    public List<EligibleOrganisationDTO> getStudents(@RequestHeader("Authorization") String token) {
+
+
+
+        return studentService.getAllStudents(token);
     }
+    @PostMapping("/apply")
+    public ResponseEntity<String> createCustomer(@RequestBody @Valid PlacementStudentRequest request, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationToken) {
+
+        return ResponseEntity.ok(studentService.createPlacementStudent(request,authorizationToken));
+    }
+
+
 }

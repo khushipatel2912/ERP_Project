@@ -5,7 +5,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 
-public class PlacementErpApplicationTests {
+@SpringBootTest
+class PlacementErpApplicationTests {
 
+    @Test
+    void contextLoads() {
+    }
 
 }

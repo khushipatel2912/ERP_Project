@@ -1,81 +1,59 @@
 package com.erp.placement_erp.Entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
+import java.time.Year;
+import java.util.Date;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "Student") // Ensure this matches the table name in your database
+@Table(name = "Student")
 public class Student {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name="student_id")
+    private int studentId;
 
-    @Column(name = "roll_number", unique = true)
+    @Column(name = "roll_number", nullable = false, unique = true)
     private String rollNumber;
 
+    @Column(name = "first_name", nullable = false)
     private String firstName;
+
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @NotNull
-    @Email
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @NotNull
+    @Column(name = "photograph_path")
+    private String photo;
+
+    @Column(name = "cgpa", nullable = false)
+    private int cgpa;
+
+    @Column(name = "total_credits", nullable = false)
+    private int credits;
+
+    @Column(name = "graduation_year", nullable = false)
+    private Year graduationYear;
+
+    @ManyToOne
+    @JoinColumn(name = "domain", referencedColumnName = "domain_id")
+    private Domains domain;
+
+    @ManyToOne
+    @JoinColumn(name = "specialisation", referencedColumnName = "specialisation_id")
+    private Specialisation specialisation;
+
+    @ManyToOne
+    @JoinColumn(name = "placement_id", referencedColumnName = "placement_id")
+    private Placement placement_id;
+
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "photograph_path")
-    private String photographPath;
-
-    private String cgpa;
-    private int totalCredits;
-
-    @Column(name = "graduation_year")
-    private int graduationYear;
-
-    private String domain;
-    private String specialization;
-    private double grade;
-
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getRollNumber() { return rollNumber; }
-    public void setRollNumber(String rollNumber) { this.rollNumber = rollNumber; }
-
-    public String getFirstName() { return firstName; }
-    public void setFirstName(String firstName) { this.firstName = firstName; }
-
-    public String getLastName() { return lastName; }
-    public void setLastName(String lastName) { this.lastName = lastName; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
-
-    public String getPhotographPath() { return photographPath; }
-    public void setPhotographPath(String photographPath) { this.photographPath = photographPath; }
-
-    public String getCgpa() { return cgpa; }
-    public void setCgpa(String cgpa) { this.cgpa = cgpa; }
-
-    public int getTotalCredits() { return totalCredits; }
-    public void setTotalCredits(int totalCredits) { this.totalCredits = totalCredits; }
-
-    public int getGraduationYear() { return graduationYear; }
-    public void setGraduationYear(int graduationYear) { this.graduationYear = graduationYear; }
-
-    public String getDomain() { return domain; }
-    public void setDomain(String domain) { this.domain = domain; }
-
-    public String getSpecialization() { return specialization; }
-    public void setSpecialization(String specialization) { this.specialization = specialization; }
-
-    public double getGrade() { return grade; }
-    public void setGrade(double grade) { this.grade = grade; }
 }
